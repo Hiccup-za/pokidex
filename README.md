@@ -1,0 +1,2 @@
+# pokidex
+Pokidex Mono Repo
