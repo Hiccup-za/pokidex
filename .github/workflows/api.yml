@@ -13,6 +13,28 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 🍞 Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: 📦 Install dependencies
+        run: |
+          cd pokidex-api
+          bun install
+
+      - name: 🗄️ Setup Database
+        run: |
+          cd pokidex-api
+          bun run db:migrate
+
+      - name: 🚀 Start API Server
+        run: |
+          cd pokidex-api
+          bun run dev &
+          # Wait for server to start
+          sleep 2
+
       - name: 📮 Install Postman CLI & Login
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
