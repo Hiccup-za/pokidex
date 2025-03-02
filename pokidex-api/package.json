@@ -1,0 +1,32 @@
+{
+  "name": "pokidex-api",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch run src/index.ts",
+    "db:generate": "bun run src/db/generate.ts",
+    "db:migrate": "bun run src/db/migrate.ts",
+    "db:schema": "drizzle-kit generate"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.13.8",
+    "@types/uuid": "^10.0.0",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.30.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@hono/swagger-ui": "^0.5.1",
+    "@hono/zod-openapi": "^0.19.1",
+    "@libsql/client": "^0.14.0",
+    "better-sqlite3": "^11.8.1",
+    "drizzle-orm": "^0.40.0",
+    "hono": "^4.7.2",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
+  }
+}
