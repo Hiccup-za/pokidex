@@ -40,7 +40,12 @@ jobs:
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
           postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
 
-      - name: 🧪  Run E2E
+      - name: 🧪  Run E2E tests
         id: users-1
         if: always()
         run: postman collection run 4032962-ca5212a5-2db2-45ed-974b-35eb80339958 -e 4032962-504a4047-594c-485f-8436-08b07db34889 -i 4032962-733327a2-727f-4643-a7a2-6e4349bc8579
+
+      - name: 🧪  Run Negative tests
+        id: users-2
+        if: always()
+        run: postman collection run 4032962-ca5212a5-2db2-45ed-974b-35eb80339958 -e 4032962-504a4047-594c-485f-8436-08b07db34889 -i 4032962-86056581-db98-4c3b-b6fa-ee546ef785be
