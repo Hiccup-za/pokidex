@@ -74,9 +74,13 @@ export async function getUserById(id: string): Promise<User | null> {
  * @returns True if the user was deleted, false if the user was not found
  */
 export async function deleteUserById(id: string): Promise<boolean> {
-  const result = await db.delete(users).where(eq(users.id, id));
+  // First check if user exists
+  const user = await getUserById(id);
+  if (!user) {
+    return false;
+  }
   
-  // For SQLite with the sqlite package, we need to check if changes were made differently
-  // This is a simplified approach - in a real app, you might want to check the result more carefully
-  return result !== null;
+  // Proceed with deletion since we know the user exists
+  await db.delete(users).where(eq(users.id, id));
+  return true;
 } 
