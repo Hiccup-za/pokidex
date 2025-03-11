@@ -12,24 +12,40 @@ async function runMigrations() {
       url: 'file:pokidex.db',
     });
     
-    // Check if the users table already exists
-    const tableCheck = await client.execute(`
-      SELECT name FROM sqlite_master 
-      WHERE type='table' AND name='users'
+    // Check existing tables and their structure
+    const tables = await client.execute(`
+      SELECT name, sql FROM sqlite_master 
+      WHERE type='table'
     `);
     
-    // Only run migrations if the users table doesn't exist
-    if (tableCheck.rows.length === 0) {
-      // Read the migration file
-      const migrationPath = path.join(process.cwd(), 'migrations', '0000_initial.sql');
-      const migrationSql = fs.readFileSync(migrationPath, 'utf8');
-      
-      // Execute the migration
-      await client.execute(migrationSql);
-      console.log('Migrations completed successfully');
-    } else {
-      console.log('Tables already exist, skipping migrations');
+    console.log('Existing tables and their structure:');
+    for (const table of tables.rows) {
+      console.log(`\nTable: ${table.name}`);
+      console.log('SQL:', table.sql);
     }
+    
+    // Check if pokedexes table exists
+    const pokedexesTable = await client.execute(`
+      SELECT name FROM sqlite_master 
+      WHERE type='table' AND name='pokedexes'
+    `);
+    
+    if (pokedexesTable.rows.length === 0) {
+      console.log('\nCreating pokedexes table...');
+      await client.execute(`
+        CREATE TABLE pokedexes (
+          id text PRIMARY KEY NOT NULL,
+          user_id text NOT NULL,
+          name text NOT NULL,
+          created_at integer NOT NULL,
+          updated_at integer NOT NULL,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE cascade,
+          CONSTRAINT pokedexes_user_id_unique UNIQUE (user_id)
+        )
+      `);
+      console.log('Pokedexes table created successfully');
+    }
+    
   } catch (error) {
     console.error('Error running migrations:', error);
     process.exit(1);
