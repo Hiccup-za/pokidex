@@ -7,6 +7,7 @@ import { initializeDatabase } from './db';
 
 // Import routes
 import userRouter from './api/user/controller';
+import pokedexRouter from './api/pokedex/controller';
 
 // Initialize the database
 await initializeDatabase();
@@ -23,6 +24,7 @@ const api = new OpenAPIHono();
 
 // Mount routes
 api.route('/', userRouter);
+api.route('/', pokedexRouter);
 
 // OpenAPI documentation
 api.doc('swagger-doc', {

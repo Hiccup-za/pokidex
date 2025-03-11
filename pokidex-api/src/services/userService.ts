@@ -36,14 +36,23 @@ export async function createUser(name: string): Promise<User> {
  * @returns All users
  */
 export async function getAllUsers(): Promise<User[]> {
-  const result = await db.select().from(users);
-  
-  return result.map((user: any) => ({
-    id: user.id,
-    name: user.name,
-    createdAt: new Date(user.createdAt),
-    updatedAt: new Date(user.updatedAt),
-  }));
+  try {
+    const result = await db.select().from(users);
+    
+    if (!Array.isArray(result)) {
+      return [];
+    }
+    
+    return result.map((user) => ({
+      id: user.id,
+      name: user.name,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
+    }));
+  } catch (error) {
+    console.error('Error in getAllUsers:', error);
+    throw error;
+  }
 }
 
 /**
