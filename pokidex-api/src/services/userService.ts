@@ -12,7 +12,7 @@ import { SQL } from 'drizzle-orm';
  */
 export async function createUser(name: string): Promise<User> {
   const now = new Date();
-  const userId = generateId('user_');
+  const userId = generateId();
   
   const newUser = {
     id: userId,
